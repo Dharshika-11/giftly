@@ -122,8 +122,7 @@ giftly/
 ```
 
 ---
-
-## 🚀 Local Setup
+Local Setup
 
 ### Prerequisites
 
