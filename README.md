@@ -1,4 +1,4 @@
-# 🎁 Giftly – Smart Gift Recommendation Assistant
+ Giftly – Smart Gift Recommendation Assistant
 
 > Find a gift they'll actually love.
 
@@ -6,7 +6,7 @@ Giftly is a production-ready, full-stack gift recommendation platform. Tell Gift
 
 ---
 
-## ✨ Features
+ Features
 
 - **Conversational gift discovery** — natural back-and-forth conversation to understand context
 - **Structured recommendations** — gift ideas with prices, reasons, and personalization tips
@@ -18,7 +18,7 @@ Giftly is a production-ready, full-stack gift recommendation platform. Tell Gift
 
 ---
 
-## 🏗 Architecture
+Architecture
 
 ```
 GitHub
@@ -45,7 +45,7 @@ GitHub Actions (CI)
 
 ---
 
-## 🧰 Tech Stack
+Tech Stack
 
 | Layer | Technology |
 |---|---|
@@ -59,7 +59,7 @@ GitHub Actions (CI)
 
 ---
 
-## 📁 Project Structure
+ Project Structure
 
 ```
 giftly/
@@ -185,7 +185,7 @@ Frontend runs at: http://localhost:3000
 
 ---
 
-## 🔑 Environment Variables
+ Environment Variables
 
 ### Backend `.env`
 
@@ -198,7 +198,7 @@ ENVIRONMENT=development
 LOG_LEVEL=INFO
 ```
 
-### Frontend `.env.local`
+ Frontend `.env.local`
 
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:8000
@@ -206,7 +206,7 @@ NEXT_PUBLIC_API_URL=http://localhost:8000
 
 ---
 
-## 🍃 MongoDB Atlas Setup
+ MongoDB Atlas Setup
 
 1. Go to [MongoDB Atlas](https://www.mongodb.com/atlas)
 2. Create a free account and cluster (M0 free tier)
@@ -219,7 +219,7 @@ NEXT_PUBLIC_API_URL=http://localhost:8000
 
 ---
 
-## 🤖 Gemini API Setup
+ Gemini API Setup
 
 1. Go to [Google AI Studio](https://aistudio.google.com/app/apikey)
 2. Create or select a project
@@ -230,7 +230,7 @@ NEXT_PUBLIC_API_URL=http://localhost:8000
 
 ---
 
-## 🧪 Running Tests
+ Running Tests
 
 ### Backend
 
@@ -242,7 +242,7 @@ source .venv/bin/activate  # Mac/Linux
 pytest tests/ -v
 ```
 
-### Frontend
+Frontend
 
 ```bash
 cd frontend
@@ -253,7 +253,7 @@ npm run build
 
 ---
 
-## 📦 Git Workflow
+Git Workflow
 
 ```bash
 git init
@@ -268,7 +268,7 @@ Every push to `main` triggers GitHub Actions CI automatically.
 
 ---
 
-## ☁️ Vercel Deployment (Frontend)
+ Vercel Deployment (Frontend)
 
 1. Go to [vercel.com](https://vercel.com) and sign in with GitHub
 2. Click **New Project** and import your GitHub repository
@@ -297,7 +297,7 @@ Vercel auto-deploys on every push to `main`.
 
 ---
 
-## ❄️ Cold-Start Handling
+ Cold-Start Handling
 
 Render's free tier spins down services after inactivity. Giftly handles this gracefully:
 
@@ -311,7 +311,7 @@ Render's free tier spins down services after inactivity. Giftly handles this gra
 
 ---
 
-## 🔒 Security
+Security
 
 - Gemini API key never exposed to frontend
 - MongoDB URI never exposed to frontend
@@ -323,7 +323,7 @@ Render's free tier spins down services after inactivity. Giftly handles this gra
 
 ---
 
-## 📋 Production Checklist
+ Production Checklist
 
 - [ ] `MONGODB_URI` set in Render environment
 - [ ] `GEMINI_API_KEY` set in Render environment
@@ -360,8 +360,7 @@ Render's free tier spins down services after inactivity. Giftly handles this gra
 - Check database user has correct permissions
 
 ---
-
-## 📡 API Reference
+ API Reference
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
