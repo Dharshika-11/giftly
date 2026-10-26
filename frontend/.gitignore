@@ -1,0 +1,19 @@
+# Environment variables (gitignored)
+.env
+.env.*
+!.env.example
+
+# Next.js
+.next/
+out/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Vercel
+.vercel

@@ -1,0 +1,415 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── CSS Custom Properties ──────────────────────────────────────────────────── */
+:root {
+  --gradient-brand: linear-gradient(135deg, #c249f5 0%, #7c3aed 50%, #2563eb 100%);
+  --gradient-warm: linear-gradient(135deg, #f59e3c 0%, #ef4444 50%, #c249f5 100%);
+  --gradient-soft: linear-gradient(135deg, #fdf4ff 0%, #fae8ff 50%, #ede9fe 100%);
+  --gradient-card: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(253,244,255,0.9) 100%);
+  --shadow-soft: 0 4px 24px rgba(194, 73, 245, 0.08);
+  --shadow-card: 0 8px 40px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 16px 60px rgba(194, 73, 245, 0.18);
+  --radius-card: 20px;
+  --radius-bubble: 18px;
+}
+
+/* ── Base Styles ────────────────────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #fdfcff;
+  color: #1a1523;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Typography ─────────────────────────────────────────────────────────────── */
+.font-display {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+/* ── Scrollbar Styling ──────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(194, 73, 245, 0.2);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(194, 73, 245, 0.4);
+}
+
+/* ── Gradient Text ──────────────────────────────────────────────────────────── */
+.gradient-text {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-warm {
+  background: var(--gradient-warm);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Glass Card ─────────────────────────────────────────────────────────────── */
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: var(--shadow-card);
+}
+
+.glass-card-dark {
+  background: rgba(30, 15, 50, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ── Gradient Backgrounds ───────────────────────────────────────────────────── */
+.bg-brand-gradient {
+  background: var(--gradient-brand);
+}
+
+.bg-soft-gradient {
+  background: var(--gradient-soft);
+}
+
+/* ── Animated Background ────────────────────────────────────────────────────── */
+.animated-bg {
+  background: linear-gradient(
+    -45deg,
+    #fdf4ff,
+    #ede9fe,
+    #dbeafe,
+    #fae8ff
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ── Shimmer Loading ────────────────────────────────────────────────────────── */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(194, 73, 245, 0.05) 25%,
+    rgba(194, 73, 245, 0.15) 50%,
+    rgba(194, 73, 245, 0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+}
+
+/* ── Typing Indicator ───────────────────────────────────────────────────────── */
+.typing-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(194, 73, 245, 0.5);
+  animation: typingBounce 1.2s ease-in-out infinite;
+}
+
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+/* ── Message Bubble ─────────────────────────────────────────────────────────── */
+.message-user {
+  background: var(--gradient-brand);
+  color: white;
+  border-radius: 20px 20px 4px 20px;
+}
+
+.message-assistant {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(194, 73, 245, 0.12);
+  border-radius: 20px 20px 20px 4px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* ── Gift Card ──────────────────────────────────────────────────────────────── */
+.gift-card {
+  background: white;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  border: 1px solid rgba(194, 73, 245, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.gift-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(194, 73, 245, 0.2);
+}
+
+/* ── Button Styles ──────────────────────────────────────────────────────────── */
+.btn-primary {
+  background: var(--gradient-brand);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 0.875rem 2rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(194, 73, 245, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0);
+  transition: background 0.3s ease;
+}
+
+.btn-primary:hover::before {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(194, 73, 245, 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  background: rgba(194, 73, 245, 0.08);
+  color: #c249f5;
+  border: 1.5px solid rgba(194, 73, 245, 0.2);
+  border-radius: 50px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: rgba(194, 73, 245, 0.15);
+  border-color: rgba(194, 73, 245, 0.4);
+  transform: translateY(-1px);
+}
+
+/* ── Chip / Quick Reply ─────────────────────────────────────────────────────── */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: rgba(194, 73, 245, 0.06);
+  border: 1.5px solid rgba(194, 73, 245, 0.15);
+  color: #7c3aed;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.chip:hover {
+  background: rgba(194, 73, 245, 0.12);
+  border-color: rgba(194, 73, 245, 0.3);
+  transform: translateY(-1px);
+}
+
+/* ── Sidebar ────────────────────────────────────────────────────────────────── */
+.sidebar-item {
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.sidebar-item:hover {
+  background: rgba(194, 73, 245, 0.06);
+  border-color: rgba(194, 73, 245, 0.1);
+}
+
+.sidebar-item.active {
+  background: rgba(194, 73, 245, 0.1);
+  border-color: rgba(194, 73, 245, 0.2);
+}
+
+/* ── Occasion Badge ─────────────────────────────────────────────────────────── */
+.occasion-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.25rem;
+  border: 1px solid rgba(194, 73, 245, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+}
+
+.occasion-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(194, 73, 245, 0.15);
+  border-color: rgba(194, 73, 245, 0.25);
+}
+
+/* ── Category Badge ─────────────────────────────────────────────────────────── */
+.category-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+}
+
+/* ── Focus States ───────────────────────────────────────────────────────────── */
+*:focus-visible {
+  outline: 2px solid #c249f5;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── Selection ──────────────────────────────────────────────────────────────── */
+::selection {
+  background: rgba(194, 73, 245, 0.2);
+  color: #1a1523;
+}
+
+/* ── Animation Utilities ────────────────────────────────────────────────────── */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out both;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s ease-out both;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.3s ease-out both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Mobile Optimizations ───────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .btn-primary {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9375rem;
+  }
+
+  .gift-card:hover {
+    transform: none;
+  }
+
+  .occasion-card:hover {
+    transform: none;
+  }
+}
+
+/* ── Input Styles ───────────────────────────────────────────────────────────── */
+.chat-input {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1.5px solid rgba(194, 73, 245, 0.15);
+  border-radius: 50px;
+  padding: 0.875rem 5rem 0.875rem 1.25rem;
+  font-size: 0.9375rem;
+  color: #1a1523;
+  width: 100%;
+  transition: all 0.3s ease;
+  outline: none;
+  resize: none;
+  min-height: 52px;
+  max-height: 120px;
+  font-family: inherit;
+}
+
+.chat-input:focus {
+  border-color: rgba(194, 73, 245, 0.4);
+  box-shadow: 0 0 0 4px rgba(194, 73, 245, 0.08);
+}
+
+.chat-input::placeholder {
+  color: rgba(26, 21, 35, 0.4);
+}
+
+/* ── Hero Orbs ──────────────────────────────────────────────────────────────── */
+.orb {
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.25;
+  position: absolute;
+  pointer-events: none;
+}
+
+/* ── Price Tag ──────────────────────────────────────────────────────────────── */
+.price-tag {
+  background: linear-gradient(135deg, #fdf4ff, #ede9fe);
+  border: 1px solid rgba(194, 73, 245, 0.15);
+  border-radius: 8px;
+  padding: 0.25rem 0.625rem;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: #7c3aed;
+}
