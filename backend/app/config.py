@@ -1,5 +1,6 @@
 """Application configuration using pydantic-settings."""
 from functools import lru_cache
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -17,6 +18,7 @@ class Settings(BaseSettings):
 
     # Gemini
     gemini_api_key: str = ""
+    gemini_model: str = "gemini-3.5-flash"
 
     # CORS
     frontend_url: str = "http://localhost:3000"

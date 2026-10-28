@@ -9,8 +9,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.config import get_settings
-from app.database import connect_to_mongo, close_mongo_connection
-from app.routes import health, conversations, chat
+from app.database import close_mongo_connection, connect_to_mongo
+from app.routes import chat, conversations, health
 
 # ── Logging Setup ──────────────────────────────────────────────────────────────
 settings = get_settings()
@@ -47,14 +47,16 @@ origins = [
     settings.frontend_url,
     "http://localhost:3000",
     "http://localhost:3001",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:3001",
 ]
-# In production accept configured origin; in dev be permissive
-if settings.environment == "development":
-    origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$"
+    if settings.environment == "development"
+    else None,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

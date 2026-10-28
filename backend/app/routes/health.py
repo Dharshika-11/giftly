@@ -1,5 +1,6 @@
 """Health check routes."""
 import logging
+
 from fastapi import APIRouter
 from pydantic import BaseModel
 

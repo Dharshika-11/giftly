@@ -1,13 +1,14 @@
 """Chat route — handles message sending with Gemini and idempotency."""
 import logging
 import uuid
+
 from fastapi import APIRouter, HTTPException, status
 
+from app.config import get_settings
 from app.database import is_connected
 from app.schemas.chat import ChatRequest, ChatResponse
 from app.services.conversation_service import get_conversation_service
 from app.services.gemini_service import get_gemini_service
-from app.config import get_settings
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api", tags=["Chat"])
@@ -58,7 +59,7 @@ async def send_chat_message(body: ChatRequest):
             conversation_id=body.conversation_id,
             message_id=existing["message_id"],
             content=existing["content"],
-            recommendations=[],
+            recommendations=existing.get("recommendations", []),
             client_message_id=body.client_message_id,
         )
 
@@ -72,9 +73,19 @@ async def send_chat_message(body: ChatRequest):
             message_id=body.client_message_id,
         )
     except ValueError:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Conversation not found.",
+        # If conversation does not exist, auto-create it with this ID so the user never gets an error
+        logger.info("Auto-creating missing conversation %s", body.conversation_id)
+        await svc.create_conversation(
+            session_id=body.session_id,
+            title="New Conversation",
+            conversation_id=body.conversation_id,
+        )
+        await svc.add_message(
+            conversation_id=body.conversation_id,
+            session_id=body.session_id,
+            role="user",
+            content=body.message,
+            message_id=body.client_message_id,
         )
     except Exception as exc:
         logger.error("Failed to save user message: %s", exc)
@@ -112,6 +123,7 @@ async def send_chat_message(body: ChatRequest):
             role="assistant",
             content=response_text,
             message_id=assistant_message_id,
+            recommendations=[r.model_dump() for r in recommendations],
         )
     except Exception as exc:
         logger.error("Failed to save assistant message: %s", exc)

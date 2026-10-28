@@ -1,10 +1,10 @@
 """Backend test suite for Giftly API."""
-import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
-from httpx import AsyncClient, ASGITransport
-from datetime import datetime
 import uuid
+from datetime import datetime
+from unittest.mock import AsyncMock, patch
 
+import pytest
+from httpx import ASGITransport, AsyncClient
 
 # ── Fixtures ───────────────────────────────────────────────────────────────────
 
@@ -240,6 +240,7 @@ def test_gemini_parse_plain_response():
 def test_gemini_parse_json_response():
     """Gemini service should parse structured JSON correctly."""
     import json
+
     from app.services.gemini_service import GeminiService
     svc = GeminiService.__new__(GeminiService)
 
@@ -262,3 +263,97 @@ def test_gemini_parse_json_response():
     assert len(recs) == 1
     assert recs[0].name == "Personalized Photo Book"
     assert recs[0].price_range == "₹1,000 – ₹2,000"
+
+
+def test_gemini_parse_json_reversed_keys():
+    """Gemini service should parse JSON when recommendations key precedes message key."""
+    from app.services.gemini_service import GeminiService
+    svc = GeminiService.__new__(GeminiService)
+
+    text = """{
+        "recommendations": [
+            {
+                "name": "Sony WH-CH720N Headphones",
+                "reason": "Great noise cancellation",
+                "price_range": "₹7,990",
+                "category": "Electronics"
+            }
+        ],
+        "message": "Here are top audio gifts for your brother!"
+    }"""
+    message, recs = svc._parse_response(text)
+    assert message == "Here are top audio gifts for your brother!"
+    assert len(recs) == 1
+    assert recs[0].name == "Sony WH-CH720N Headphones"
+    # Category "Electronics" should normalize to "Tech"
+    assert recs[0].category == "Tech"
+
+
+def test_gemini_parse_markdown_code_block_with_trailing_commas():
+    """Gemini service should parse code-fenced JSON and sanitize trailing commas."""
+    from app.services.gemini_service import GeminiService
+    svc = GeminiService.__new__(GeminiService)
+
+    text = """Here is what I found for you:
+```json
+{
+    "message": "Curated picks for her birthday:",
+    "recommendations": [
+        {
+            "name": "Scented Soy Candle Set",
+            "reason": "Relaxing and aesthetic",
+            "price_range": "₹1,200 – ₹1,800",
+            "category": "Wellness",
+            "personalization": "Choose lavender notes",
+        },
+    ],
+}
+```
+Let me know if you would like more options!"""
+    message, recs = svc._parse_response(text)
+    assert message == "Curated picks for her birthday:"
+    assert len(recs) == 1
+    assert recs[0].name == "Scented Soy Candle Set"
+    assert recs[0].category == "Wellness"
+
+
+def test_gemini_category_normalization():
+    """Gemini service should normalize known synonyms to supported categories."""
+    from app.services.gemini_service import normalize_category
+    assert normalize_category("electronics") == "Tech"
+    assert normalize_category("gaming") == "Tech"
+    assert normalize_category("fitness") == "Sports"
+    assert normalize_category("kitchen") == "Home"
+    assert normalize_category("decor") == "Home"
+    assert normalize_category("clothing") == "Fashion"
+    assert normalize_category("literature") == "Books"
+    assert normalize_category("Unknown Category 123") == "Personalized"
+
+
+def test_gemini_build_history_includes_recommendations():
+    """History building should include previous recommendation details for conversational memory."""
+    from app.services.gemini_service import GeminiService
+    svc = GeminiService.__new__(GeminiService)
+    messages = [
+        {"role": "user", "content": "Gift for friend"},
+        {
+            "role": "assistant",
+            "content": "Here is an idea:",
+            "recommendations": [
+                {
+                    "name": "Leather Journal",
+                    "category": "Personalized",
+                    "price_range": "₹800",
+                    "reason": "Great for thoughts",
+                }
+            ],
+        },
+    ]
+    history = svc._build_history(messages)
+    assert len(history) == 2
+    assert history[0]["role"] == "user"
+    assert history[1]["role"] == "model"
+    assert "Leather Journal" in history[1]["parts"][0]["text"]
+    assert "Personalized" in history[1]["parts"][0]["text"]
+
+

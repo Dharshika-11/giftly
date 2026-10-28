@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 from typing import List, Optional
 
-from app.database import get_database, is_connected
+from app.database import get_database
 from app.models.conversation import ConversationModel, MessageModel
 from app.schemas.conversation import ConversationDetail, ConversationSummary, MessageOut
 
@@ -25,9 +25,13 @@ class ConversationService:
         return db["conversations"]
 
     async def create_conversation(
-        self, session_id: str, title: str = "New Conversation"
+        self,
+        session_id: str,
+        title: str = "New Conversation",
+        conversation_id: Optional[str] = None,
     ) -> ConversationModel:
         conversation = ConversationModel(
+            conversation_id=conversation_id or str(uuid.uuid4()),
             session_id=session_id,
             title=title,
         )
@@ -52,10 +56,6 @@ class ConversationService:
         )
         summaries = []
         async for doc in cursor:
-            # Get message count separately if needed
-            count = await self._collection.count_documents(
-                {"conversation_id": doc["conversation_id"]}
-            )
             msg_count = len(doc.get("messages", []))
             summaries.append(
                 ConversationSummary(
@@ -101,11 +101,13 @@ class ConversationService:
         role: str,
         content: str,
         message_id: Optional[str] = None,
+        recommendations: Optional[List[dict]] = None,
     ) -> MessageModel:
         message = MessageModel(
             message_id=message_id or str(uuid.uuid4()),
             role=role,
             content=content,
+            recommendations=recommendations or [],
         )
         now = datetime.utcnow()
         result = await self._collection.update_one(
@@ -146,7 +148,11 @@ class ConversationService:
         if not doc:
             return []
         return [
-            {"role": m["role"], "content": m["content"]}
+            {
+                "role": m["role"],
+                "content": m["content"],
+                "recommendations": m.get("recommendations", []),
+            }
             for m in doc.get("messages", [])
         ]
 
