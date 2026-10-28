@@ -1,14 +1,16 @@
 """Pydantic models for conversation documents."""
+import uuid
 from datetime import datetime
 from typing import List, Optional
+
 from pydantic import BaseModel, Field
-import uuid
 
 
 class MessageModel(BaseModel):
     message_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     role: str  # "user" or "assistant"
     content: str
+    recommendations: List[dict] = Field(default_factory=list)
     timestamp: datetime = Field(default_factory=datetime.utcnow)
 
 

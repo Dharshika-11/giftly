@@ -1,8 +1,10 @@
 """Request/response schemas for the API."""
 from datetime import datetime
 from typing import List, Optional
+
 from pydantic import BaseModel, Field
 
+from app.schemas.chat import GiftRecommendation
 
 # ── Message schemas ────────────────────────────────────────────────────────────
 
@@ -10,6 +12,7 @@ class MessageOut(BaseModel):
     message_id: str
     role: str
     content: str
+    recommendations: List[GiftRecommendation] = Field(default_factory=list)
     timestamp: datetime
 
 

@@ -1,6 +1,7 @@
 """Conversation management routes."""
 import logging
 from typing import List
+
 from fastapi import APIRouter, HTTPException, Query, status
 
 from app.database import is_connected
